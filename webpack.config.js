@@ -1,10 +1,16 @@
 const path = require('path');
+const glob = require('glob');
 
 module.exports = {
   mode: 'production',
-  entry: {
-    'example.test': './src/endpoints/example.test.ts',
-    'new-endpoint.test': './src/endpoints/new-endpoint.test.ts'
+  entry: () => {
+    const testFiles = glob.sync('./src/endpoints/**/*.test.ts');
+    return testFiles.reduce((entries, file) => {
+      const name = path.basename(file, '.ts');
+      entries[name] = file;
+      entries[name] = './' + file;
+      return entries;
+    }, {});
   },
   output: {
     path: path.join(__dirname, 'dist/endpoints'),

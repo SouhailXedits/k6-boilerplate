@@ -1,14 +1,14 @@
 import { Options } from 'k6/options';
 import { makeRequest } from '../lib/baseRequest';
 import { createTestConfig } from '../lib/testBuilder';
-import { BASE_URL, DEFAULT_HEADERS } from '../config';
+import { config } from '../config';
 
 export let options: Options = createTestConfig({
   name: 'Get User Profile',
   request: {
     method: 'GET',
-    endpoint: `${BASE_URL}`,
-    headers: DEFAULT_HEADERS,
+    endpoint: `${config.baseUrl}`,
+    headers: config.defaultHeaders,
   },
   thresholds: {
     'http_req_duration': ['p(95)<500', 'p(99)<1000'], // 95% of requests should be below 500ms, 99% of requests should be below 1000ms
@@ -29,7 +29,7 @@ export let options: Options = createTestConfig({
 export default function() {
   makeRequest({
     method: 'GET',
-    endpoint: `${BASE_URL}`,
-    headers: DEFAULT_HEADERS,
+    endpoint: `${config.baseUrl}`,
+    headers: config.defaultHeaders,
   });
 } 

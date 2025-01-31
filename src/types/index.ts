@@ -9,13 +9,18 @@ export interface ThresholdConfig {
   [key: string]: string[];
 }
 
-export interface TestConfig {
+export interface LoadProfile {
+  stages?: { duration: string; target: number }[];
+  vus?: number;
+  duration?: string;
+}
+
+export interface TestConfig extends LoadProfile {
   name: string;
   request: RequestConfig;
   thresholds?: ThresholdConfig;
-  vus?: number;
-  duration?: string;
   tags?: { [key: string]: string };
   sleep?: number;
-  stages?: { duration: string; target: number }[];
+  teardown?: () => void;
+  setup?: () => any;
 } 
