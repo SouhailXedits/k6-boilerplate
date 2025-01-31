@@ -1,35 +1,52 @@
 import { Options } from 'k6/options';
 import { makeRequest } from '../lib/baseRequest';
 import { createTestConfig } from '../lib/testBuilder';
+import { withRetry, randomSleep } from '../lib/testHelpers';
 import { config } from '../config';
+import { defaultMetrics } from '../lib/metrics';
 
 export let options: Options = createTestConfig({
-  name: 'Get User Profile',
+  name: 'Enhanced Example Test',
   request: {
     method: 'GET',
-    endpoint: `${config.baseUrl}`,
+    endpoint: `${config.baseUrl}/api/users`,
     headers: config.defaultHeaders,
+    validateFn: (response) => {
+      const data = response.json();
+      return Array.isArray(data) && data.length > 0;
+    },
   },
   thresholds: {
-    'http_req_duration': ['p(95)<500', 'p(99)<1000'], // 95% of requests should be below 500ms, 99% of requests should be below 1000ms
-    'http_req_failed': ['rate<0.01'],    // Less than 1% of requests should fail
+    ...config.defaultThresholds,
+    'business_logic_duration': ['p(95)<1000'],
   },
-//   vus: 10,
-//   duration: '2s',
-  tags: {
-    'test': 'example',
-  },
-  sleep: 1,
   stages: [
-    { duration: '10s', target: 10 },
-    { duration: '10s', target: 0 },
+    { duration: '1m', target: 10 },
+    { duration: '3m', target: 50 },
+    { duration: '1m', target: 0 },
   ],
+  tags: {
+    testType: 'api',
+    component: 'users',
+  },
+  metrics: defaultMetrics,
 });
 
-export default function() {
-  makeRequest({
+export function setup() {
+  // Setup code here
+  return { startTime: new Date().toISOString() };
+}
+
+export default function(data: any) {
+  withRetry({
     method: 'GET',
-    endpoint: `${config.baseUrl}`,
+    endpoint: `${config.baseUrl}/api/users`,
     headers: config.defaultHeaders,
   });
+
+  randomSleep(1, 3);
+}
+
+export function teardown(data: any) {
+  // Cleanup code here
 } 
