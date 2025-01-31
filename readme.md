@@ -99,7 +99,7 @@ Edit `src/config.ts` to modify environment-specific settings:
 ```typescript
 const environments = {
   local: {
-    baseUrl: 'http://localhost:6003',
+    baseUrl: 'http://localhost:3000',
     defaultHeaders: {
       'Accept': 'application/json',
       // ... other headers

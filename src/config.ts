@@ -8,7 +8,7 @@ const token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NThiZjg5YWQ4YzQw
 
 const environments: Record<string, EnvironmentConfig> = {
   local: {
-    baseUrl: 'http://localhost:6003',
+    baseUrl: 'http://localhost:3000',
     defaultHeaders: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
