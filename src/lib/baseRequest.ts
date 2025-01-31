@@ -14,10 +14,6 @@ export function makeRequest(config: RequestConfig) {
 
   console.log(response.status);
 
-//   check(response, {
-//     'status is 200': (r) => r.status === 200,
-//   });
-
 
   return response;
 } 
