@@ -31,7 +31,7 @@ export function makeRequest(config: RequestConfig) {
     // Default checks
     check(response, {
       'status is ok': (r) => r.status >= 200 && r.status < 300,
-      'response time < 2s': (r) => r.timings.duration < 2000,
+      'response time < 1s': (r) => r.timings.duration < 1000,
     });
 
     return response;

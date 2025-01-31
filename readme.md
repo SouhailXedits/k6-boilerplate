@@ -11,6 +11,12 @@ A modern, TypeScript-based boilerplate for creating and running performance test
 - 🔄 Hot reloading during development
 - 📝 Type definitions for better developer experience
 - 🎨 Customizable test scenarios
+- 🔍 Advanced logging with different log levels
+- 📈 Custom metrics tracking
+- 🔁 Automatic retry mechanism with backoff
+- ✅ Request validation support
+- ⏱️ Random sleep intervals
+- 🏷️ Custom tagging support
 
 ## Prerequisites
 
@@ -39,18 +45,61 @@ npm run build
 
 ```
 ├── src/
-│   ├── config.ts        # Environment configurations
-│   ├── endpoints/       # Test files
-│   │   ├── example.test.ts
-│   │   └── new-endpoint.test.ts
-│   ├── lib/             # Shared utilities
-│   │   ├── baseRequest.ts
-│   │   └── testBuilder.ts
-│   ├── types/           # TypeScript type definitions
-│   └── index.ts
+│   ├── config.ts           # Environment configurations
+│   ├── endpoints/          # Test files
+│   ├── lib/               
+│   │   ├── baseRequest.ts  # Enhanced request handling
+│   │   ├── testBuilder.ts  # Test configuration builder
+│   │   ├── testHelpers.ts  # Retry and utility functions
+│   │   ├── metrics.ts      # Custom metrics definitions
+│   │   └── logger.ts       # Structured logging
+│   └── types/              # TypeScript type definitions
 ├── scripts/
-│   └── create-test.js   # Test file generator
-└── dist/                # Compiled JavaScript files
+└── dist/                   # Compiled JavaScript files
+```
+
+## Advanced Features
+
+### Retry Mechanism
+```typescript
+withRetry({
+  method: 'GET',
+  endpoint: `${config.baseUrl}/api/users`,
+  headers: config.defaultHeaders,
+}, {
+  maxRetries: 3,
+  backoffFactor: 1.5,
+  initialWait: 1000
+});
+```
+
+### Custom Metrics
+```typescript
+const metrics = new MetricsBuilder()
+  .addTrend('business_logic_duration')
+  .addCounter('custom_errors')
+  .addRate('successful_requests')
+  .getMetrics();
+```
+
+### Request Validation
+```typescript
+makeRequest({
+  method: 'GET',
+  endpoint: '/api/users',
+  validateFn: (response) => {
+    const data = response.json();
+    return Array.isArray(data) && data.length > 0;
+  }
+});
+```
+
+### Structured Logging
+```typescript
+logger.info('Request successful');
+logger.error('Request failed');
+logger.debug('Processing response');
+logger.warn('Retrying request');
 ```
 
 ## Usage
