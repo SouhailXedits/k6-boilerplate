@@ -9,7 +9,10 @@ dist/
 
 
 # lock files
-*.lock
+pnpm-lock.yaml
+pnpm-lock.yaml.bak
+package-lock.json
+yarn.lock
 
 # k6 files
 *.log
